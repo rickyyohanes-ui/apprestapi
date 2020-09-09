@@ -72,3 +72,20 @@ exports.ubahMahasiswa = function (req, res) {
     }
   );
 };
+
+// menghapus data berdasarkan id
+exports.hapusMahasiswa = function (req, res) {
+  var id = req.body.id_mahasiswa;
+
+  conn.query("DELETE FROM mahasiswa WHERE id_mahasiswa=? ", [id], function (
+    error,
+    rows,
+    fields
+  ) {
+    if (error) {
+      conn.log(error);
+    } else {
+      response.ok("Berhasil hapus Data", res);
+    }
+  });
+};
