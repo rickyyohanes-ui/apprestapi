@@ -17,7 +17,7 @@ exports.register = function(req,res){
             tanggal_daftar: new Date(),
     }
 
-    var query = "SELECT email FROM ?? WHERE ??";
+    var query = "SELECT email FROM ?? WHERE ??=?";
     var table = ["user", "email", post.email]; 
     
     query = mysql.format(query,table);
@@ -27,7 +27,7 @@ exports.register = function(req,res){
             console.log(error)
         }else{
             if(rows.length == 0){
-                var query = "INSERT INTO ?? SET ??";
+                var query = "INSERT INTO ?? SET ?";
                 var table = ["user"];
                 query = mysql.format(query,table);
                 conn.query(query, post, function(error,rows){
@@ -38,7 +38,7 @@ exports.register = function(req,res){
                     }
                 })
             }else{
-                response.ok("email sudah tersedia!");
+                response.ok("email sudah tersedia!", res);
             }
         }
     })
