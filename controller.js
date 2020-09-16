@@ -11,7 +11,7 @@ exports.index = function (req, res) {
 exports.tampilsemuasiswa = function (req, res) {
   conn.query("SELECT * FROM mahasiswa", function (error, rows, fields) {
     if (error) {
-      conn.log(error);
+      console.log(error);
     } else {
       response.ok(rows, res);
     }
@@ -27,7 +27,7 @@ exports.tampildataberdasarkanid = function (req, res) {
     fields
   ) {
     if (error) {
-      conn.log(error);
+      console.log(error);
     } else {
       response.ok(rows, res);
     }
@@ -45,7 +45,7 @@ exports.tambahMahasiswa = function (req, res) {
     [nim, nama, jurusan],
     function (error, rows, fields) {
       if (error) {
-        conn.log(error);
+        console.log(error);
       } else {
         response.ok("Berhasil Menambahkan Data", res);
       }
@@ -65,7 +65,7 @@ exports.ubahMahasiswa = function (req, res) {
     [nim, nama, jurusan, id],
     function (error, rows, fields) {
       if (error) {
-        conn.log(error);
+        console.log(error);
       } else {
         response.ok("Berhasil Ubah Data", res);
       }
@@ -73,19 +73,33 @@ exports.ubahMahasiswa = function (req, res) {
   );
 };
 
-// menghapus data berdasarkan id
-exports.hapusMahasiswa = function (req, res) {
+// Hapus Data
+exports.hapusData = function (req, res) {
   var id = req.body.id_mahasiswa;
 
-  conn.query("DELETE FROM mahasiswa WHERE id_mahasiswa=? ", [id], function (
+  conn.query("DELETE FROM mahasiswa WHERE id_mahasiswa=?", [id], function (
     error,
     rows,
     fields
   ) {
     if (error) {
-      conn.log(error);
+      console.log(error);
     } else {
-      response.ok("Berhasil hapus Data", res);
+      response.ok("Berhasil Hapus Data", res);
     }
   });
+};
+
+// nampilkan matakuliah group
+exports.tampilgroupkuliah = function (req, res) {
+  conn.query(
+    "SELECT mahasiswa.id_mahasiswa, mahasiswa.nim, mahasiswa.nama, mahasiswa.jurusan, matakuliah.matakuliah, matakuliah.sks FROM krs JOIN matakuliah JOIN mahasiswa WHERE krs.id_matakuliah = matakuliah.id_matakuliah AND krs.id_mahasiswa = mahasiswa.id_mahasiswa ORDER BY mahasiswa.id_mahasiswa",
+    function (error, rows, fields) {
+      if (error) {
+        console.log(error);
+      } else {
+        response.oknested(rows, res);
+      }
+    }
+  );
 };
